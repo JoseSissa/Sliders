@@ -6,6 +6,7 @@ const sliderButtonRight = document.getElementById('sliderButtonRight')
 // Llamamos y almacenamos todas las variables css
 const rootStyles = document.documentElement.style;
 
+// Lleva el conteo del slider en donde se encuentra, sirve para saber si debe reorganizar los sliders
 let slideCounter = 0;
 let isInTransition = false;
 
@@ -17,7 +18,7 @@ const DIRECTION = {
 // Recuperar el valor de transform (css) cada vez que se haga click
 const getTransformValue = () => Number(rootStyles.getPropertyValue('--slide-transform').replace('px', ''));
 
-// Reorganizar los sliders cuando se acerquen al final
+// Reorganizar los sliders cuando se acerquen al final o al estar en el inicio (Slider 1)
 const reorderSlide = () => {
     const transformValue = getTransformValue();
     rootStyles.setProperty('--transition', 'none');
@@ -41,7 +42,7 @@ const reorderSlide = () => {
     isInTransition = false;
 };
 
-// Función que controla el movimiento del slider
+// Controla el movimiento del slider cuando se da click en cualquiera de los dos botones
 const moveSlide = (direction) => {
     if (isInTransition) return;
     const transformValue = getTransformValue();
@@ -71,6 +72,7 @@ sliderButtonLeft.addEventListener('click', () => moveSlide(DIRECTION.LEFT));
 sliderButtonRight.addEventListener('click', () => moveSlide(DIRECTION.RIGHT));
 
 // Reorganizamos los elementos del slider justo despúes de acabar la última animación
+// esto si el slider está en el 1 y pone el último a la izquierda, o si está en el penúltimo, pone el primero a la derecha
 slider.addEventListener('transitionend', reorderSlide);
 
 reorderSlide();
